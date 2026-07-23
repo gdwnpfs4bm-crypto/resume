@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balaussa Tazhokova | Academic & Biotech CV</title>
+    
+    <!-- Sci-Fi & Modern Tech Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-light: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --card-border: rgba(226, 232, 240, 0.8);
+            --accent-primary: #0284c7;  /* Deep Sky Blue */
+            --accent-teal: #0d9488;     /* Biotech Teal */
+            --accent-indigo: #4f46e5;   /* Modern Indigo */
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sci-Fi Typography Classes */
+        .hero-title {
+            font-family: 'Orbitron', 'Inter', sans-serif !important;
+            letter-spacing: 0.01em;
+        }
+
+        .section-header, .hero-badge, .timeline-title, .score-num {
+            font-family: 'Rajdhani', 'Inter', sans-serif !important;
+            letter-spacing: 0.02em;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Dynamic Background Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(2, 132, 199, 0.3);
+            box-shadow: 0 15px 35px -5px rgba(2, 132, 199, 0.12);
+            transform: translateY(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240, 249, 255, 0.9));
+            border: 1px solid rgba(186, 230, 253, 0.6);
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .avatar-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-teal));
+            z-index: -1;
+            filter: blur(12px);
+            opacity: 0.35;
+        }
+
+        .profile-img {
+            width: 190px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 1.25rem;
+            border: 3px solid #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .hero-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e0f2fe;
+            color: var(--accent-primary);
+            border: 1px solid #bae6fd;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .contacts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffffff;
+            padding: 0.55rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: 0.2s;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: #f0f9ff;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1.1fr;
+            gap: 2rem;
+        }
+
+        /* Titles (Размерлері кішірейтілді) */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.15rem; /* 1.4rem-дан 1.15rem-ға кішірейтілді */
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .section-header i {
+            color: var(--accent-primary);
+            font-size: 1rem;
+        }
+
+        /* Interactive Timeline */
+        .timeline {
+            border-left: 2px solid #e2e8f0;
+            padding-left: 1.3rem;
+            margin-left: 0.4rem;
+        }
+
+        .timeline-node {
+            position: relative;
+            margin-bottom: 1.6rem;
+        }
+
+        .timeline-node::before {
+            content: '';
+            position: absolute;
+            left: -1.65rem;
+            top: 0.25rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            box-shadow: 0 0 0 4px #e0f2fe;
+        }
+
+        .timeline-date {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
+            font-weight: 700;
+        }
+
+        .timeline-title {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .timeline-sub {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Research Vision Highlight Box */
+        .vision-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ccfbf1 100%);
+            border: 1px solid #99f6e4;
+            border-radius: 1.25rem;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Interactive Skills Pills */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .pill {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: var(--text-dark);
+            padding: 0.4rem 0.85rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.25s;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .pill:hover {
+            background: var(--accent-primary);
+            color: #ffffff;
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+        }
+
+        .pill:hover i {
+            color: #ffffff !important;
+        }
+
+        /* Platform Image Container */
+        .platform-img-container {
+            margin-top: 1rem;
+            border-radius: 0.85rem;
+            overflow: hidden;
+            border: 1px solid rgba(186, 230, 253, 0.8);
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.08);
+            background: #ffffff;
+        }
+
+        .platform-img {
+            width: 100%;
+            display: block;
+        }
+
+        .img-caption {
+            padding: 0.6rem 1rem;
+            font-size: 0.82rem;
+            color: var(--accent-primary);
+            background: rgba(240, 249, 255, 0.9);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-top: 1px solid #e0f2fe;
+        }
+
+        /* TOEIC Score Card Light */
+        .score-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            padding: 1rem 1.2rem;
+            border-radius: 0.85rem;
+            border: 1px solid #e2e8f0;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .score-num {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--accent-indigo);
+        }
+
+        /* TOEIC PDF Certificate Section */
+        .certificate-preview-box {
+            margin-top: 1.2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 0.85rem;
+            padding: 1.2rem;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.06);
+        }
+
+        .pdf-btn-group {
+            display: flex;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .pdf-download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            background: var(--accent-indigo);
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+            padding: 0.65rem 1.2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .pdf-download-btn:hover {
+            background: #4338ca;
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .pdf-download-btn i {
+            font-size: 1rem;
+        }
+
+        .whatsapp-btn {
+            background: #1eac52 !important;
+            color: #ffffff !important;
+            border-color: #25d366 !important;
+            font-weight: 700;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128c7e !important;
+            border-color: #128c7e !important;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            color: #ffffff !important;
+        }
+
+        .whatsapp-btn svg {
+            fill: currentColor;
+        }
+
+        /* Responsive Mobile Optimization */
+        @media (max-width: 900px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .hero { 
+                flex-direction: column; 
+                text-align: center; 
+                padding: 1.5rem 1.2rem;
+                gap: 1.5rem;
+            }
+
+            .profile-img {
+                width: 150px;
+                height: 190px;
+            }
+
+            .hero-title {
+                font-size: 1.45rem;
+            }
+
+            .section-header {
+                font-size: 1.05rem;
+            }
+
+            .grid { 
+                grid-template-columns: 1fr; 
+                gap: 1rem;
+            }
+
+            .glass-card {
+                padding: 1.25rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .contacts { 
+                justify-content: center; 
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Interactive Light Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container">
+        
+        <!-- Hero Header -->
+        <header class="glass-card hero">
+            <div class="avatar-wrapper">
+                <img src="мен.png" alt="Balaussa Tazhokova" class="profile-img">
+            </div>
+            <div>
+                <div class="hero-badge"><i class="fa-solid fa-dna"></i> ТҮЙІНДЕМЕ</div>
+                <h1 class="hero-title">Тажокова Балауса Берікқызы</h1>
+                <p style="color: var(--text-muted); font-size: 0.98rem; max-width: 620px; font-weight: 500;">
+                    Магистр, оқытушы-лаборант. Биологиялық жүйелердің физика-химиялық негіздерін, виртуалды оқыту платформаларын және ЖИ-әдістерін зерттеуші.
+                </p>
+                <div class="contacts">
+                    <!-- WhatsApp Батырмасы -->
+                    <a href="https://wa.me/77072127200?text=Сәлеметсіз%20бе!" target="_blank" class="contact-btn whatsapp-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.06 3.965l-1.127 4.12 4.214-1.105A7.834 7.834 0 0 0 7.994 16c4.367 0 7.926-3.558 7.93-7.93a7.898 7.898 0 0 0-2.323-5.744zM7.994 14.52a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                        </svg>
+                        WhatsApp-қа жазу
+                    </a>
+
+                    <!-- Қалған байланыс батырмалары -->
+                    <a href="tel:+77774427200" class="contact-btn"><i class="fa-solid fa-phone" style="color:var(--accent-primary);"></i> +7 777 442 72 00</a>
+                    <a href="mailto:tazhokova@mail.ru" class="contact-btn"><i class="fa-solid fa-envelope" style="color:var(--accent-teal);"></i> tazhokova@mail.ru</a>
+                    <span class="contact-btn"><i class="fa-solid fa-location-dot" style="color:var(--accent-indigo);"></i> Алматы, Қазақстан</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid">
+            
+            <!-- Left Column -->
+            <div>
+                <!-- Academic Objective -->
+                <div class="glass-card">
+                    <div class="section-header"><i class="fa-solid fa-bullseye"></i> Докторантурадағы академиялық мақсат</div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+                        Биология ғылымы бойынша докторантурада білім алып, биологиялық жүйелердің физикалық негіздерін, жасушалық және молекулалық процестерді заманауи эксперименттік, есептеу және цифрлық әдістер арқылы зерттеу. Биофизика, молекулалық биология, вирусология, паразитология, астрономия және астробиология тоғысындағы пәнаралық ғылыми жобаларға қатысу.
+                    </p>
+                </div>
+
+                <!-- Undergraduate Thesis / Bachelor Research -->
+                <div class="glass-card vision-box">
+                    <div class="section-header" style="border: none; margin-bottom: 0.6rem; padding: 0;">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--accent-teal);"></i> Бакалавриаттағы дипломдық жұмыс
+                    </div>
+                    
+                    <h3 style="color: var(--text-dark); font-size: 1.05rem; margin-bottom: 0.8rem; font-weight: 700; line-height: 1.5;">
+                        «Сасықкөл көліндегі мөңке балығының паразиттерінің түр құрамы мен сандық көрсеткіштерін анықтау»
+                    </h3>
+
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.6rem; line-height: 1.6;">
+                        <strong>Жұмыстың мақсаты:</strong> Сасықкөл көліндегі кейбір кәсіптік балықтардың қазіргі кездегі паразиттерінің түр құрамы мен көлдегі балық өнімділігіне әсер ететін инвазиялық аурулардың патогенді қоздырғыштарын анықтау.
+                    </p>
+
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+                        <strong>Нәтижесі:</strong> Мөңке балығы паразиттерінің сапалық және сандық көрсеткіштері, доминантты түрлері мен локализациясы анықталып, көлдің эпизоотологиялық жағдайына толықтай талдау жасалды.
+                    </p>
+                </div>
+
+                <!-- Master Research -->
+                <div class="glass-card">
+                    <div class="section-header">
+                        <i class="fa-solid fa-laptop-code"></i> Магистрлік зерттеу жұмысы
+                    </div>
+                    <h4 style="color: var(--accent-primary); font-size: 1.05rem; margin-bottom: 0.5rem; font-weight: 700;">
+                        «Биология сабағында зертханалық жұмыстарды орындауға арналған виртуалды оқу платформасын жобалау және тиімділігін бағалау»
+                    </h4>
+                    <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.2rem;">
+                        Зерттеу барысында виртуалды зертханалық платформа әзірленіп, цифрлық білім беру ортасын жобалау және оның білім алушылардың оқу нәтижелеріне тигізетін тиімділігі бағаланды.
+                    </p>
+
+                    <!-- Платформа суретіне арналған заманауи блок -->
+                    <div class="platform-img-container">
+                        <img src="biosphere.png" alt="BioSphere Virtual Platform" class="platform-img" style="max-height: 250px; object-fit: contain;">
+                        <div class="img-caption">
+                            <i class="fa-solid fa-vr-cardboard"></i> «BioSphere» виртуалды зертханалық платформасының интерфейсі
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scientific Publications -->
+                <div class="glass-card">
+                    <div class="section-header">
+                        <i class="fa-solid fa-book-bookmark"></i> Ғылыми жарияланымдар мен Конференциялар (7)
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        
+                        <div style="border-left: 3px solid var(--accent-indigo); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-indigo); font-weight: 700;">София, Болгария | 2026</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«The Future of Science, Technology and Economy» IV халықаралық ғылыми-практикалық конференциясы</div>
+                            <small style="color: var(--text-muted);">ISBN 979-8-89704-988-2</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-primary); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 700;">ҚазҰПУ Хабаршысы | 2026 (Баспада)</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«Биология сабақтарында виртуалды оқу платформасын пайдаланудың білім алушылардың оқу нәтижелеріне әсері»</div>
+                            <small style="color: var(--text-muted);">Абай атындағы ҚазҰПУ Хабаршысы, «Жаратылыстану-география ғылымдары» сериясы, 2-том</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-teal); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 700;">Алматы–Ташкент–Бішкек | 2025</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«Орталық Азияның биологиялық әртүрлілігін зерттеу, сақтау және ұтымды пайдалану» III халықаралық конференциясы</div>
+                            <small style="color: var(--text-muted);">369–374 б. | ISBN 978-601-353-367-4</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-primary); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 700;">Алматы | 2025</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«In the World of Science and Education» халықаралық ғылыми-практикалық журналы</div>
+                            <small style="color: var(--text-muted);">14–20 б. | ISSN 3007-8946</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-indigo); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-indigo); font-weight: 700;">Ғылыми журнал | 2025</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«Central Asian Scientific Journal»</div>
+                            <small style="color: var(--text-muted);">3 том, Vol. 4(28), 188–192 б.</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-teal); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 700;">Астана | 2025</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«Endless Light in Science» халықаралық ғылыми журналы</div>
+                            <small style="color: var(--text-muted);">84–89 б. | ISSN 3007-8946</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-primary); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-primary); font-weight: 700;">Алматы | 2024</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«Қазіргі биологиялық білім беру мәселелерін зерттеудің перспективалық бағыттары» халықаралық конференциясы</div>
+                            <small style="color: var(--text-muted);">Абай атындағы ҚазҰПУ, «Ұлағат» баспасы, 310–314 б. | ISBN 978-601-353-327-8</small>
+                        </div>
+
+                        <div style="border-left: 3px solid var(--accent-teal); padding-left: 0.8rem;">
+                            <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 700;">Алматы, Қазақстан | 2024</div>
+                            <div style="color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">«ФАРАБИ ӘЛЕМІ» студенттер мен жас ғалымдардың халықаралық ғылыми конференциясы</div>
+                            <small style="color: var(--text-muted);">Қазақ университеті, 2024 – 57-59 б. | ISBN 978-601-04-6645-6</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Education -->
+                <div class="glass-card">
+                    <div class="section-header"><i class="fa-solid fa-graduation-cap"></i> Білімі</div>
+                    <div class="timeline">
+                        <div class="timeline-node">
+                            <div class="timeline-date">2024 — 2026</div>
+                            <div class="timeline-title">Магистратура</div>
+                            <div class="timeline-sub">Абай атындағы ҚазҰПУ «Биология»</div>
+                        </div>
+                        <div class="timeline-node">
+                            <div class="timeline-date">2020 — 2024</div>
+                            <div class="timeline-title">Бакалавриат</div>
+                            <div class="timeline-sub">Әл-Фараби атындағы ҚазҰУ «Биология»</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="glass-card">
+                    <div class="section-header"><i class="fa-solid fa-briefcase"></i> Жұмыс орны</div>
+                    <div class="timeline">
+                        <div class="timeline-node">
+                            <div class="timeline-date">2024 — ҚАЗІРГІ УАҚЫТ</div>
+                            <div class="timeline-title">Оқытушы-лаборант</div>
+                            <div class="timeline-sub">Принтмедиа технологиялар колледжі</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages & Certificate -->
+                <div class="glass-card">
+                    <div class="section-header"><i class="fa-solid fa-language"></i> Тілдік сертификат</div>
+                    
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 1rem; color: var(--text-dark); font-size: 0.92rem; font-weight: 600;">
+                        <li style="margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-check" style="color: var(--accent-teal); font-size: 0.8rem;"></i> Қазақ тілі — еркін
+                        </li>
+                        <li style="margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-check" style="color: var(--accent-teal); font-size: 0.8rem;"></i> Орыс тілі — еркін
+                        </li>
+                        <li style="margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-check" style="color: var(--accent-teal); font-size: 0.8rem;"></i> Ағылшын тілі — B1
+                        </li>
+                    </ul>
+
+                    <!-- TOEIC Score & PDF Download Box -->
+                    <div class="certificate-preview-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div>
+                                <div style="font-weight: 800; color: var(--text-dark); font-size: 1rem; display: flex; align-items: center; gap: 0.4rem; font-family: 'Rajdhani', sans-serif;">
+                                    <i class="fa-solid fa-award" style="color: var(--accent-indigo);"></i> TOEIC® Official Score
+                                </div>
+                                <small style="color: var(--text-muted); font-size: 0.82rem;">
+                                    Listening 380 | Reading 395
+                                </small>
+                            </div>
+                            <div class="score-num">775</div>
+                        </div>
+
+                        <div class="pdf-btn-group">
+                            <a href="certificate_2026072272015_260722_122028.pdf" download target="_blank" class="pdf-download-btn">
+                                <i class="fa-solid fa-file-pdf"></i> Сертификатты жүктеу (PDF)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio-Tech Skills -->
+                <div class="glass-card">
+                    <div class="section-header"></i> Қызығушылығымдағы ғылыми бағыттар</div>
+                    <div class="skill-tags">
+                        <span class="pill">Биофизика</span>
+                        <span class="pill">Молекулалық биология</span>
+                        <span class="pill">Микробиология</span>
+                        <span class="pill">Вирусология</span>
+                        <span class="pill">Астробиология</span>
+                        <span class="pill">Компьютерлік модельдеу</span>
+                        <span class="pill">ЖИ & Цифрлық биология</span>
+                    </div>
+                </div>
+
+                <!-- Цифрлық және Компьютерлік Құзыреттер -->
+                <div class="glass-card">
+                    <div class="section-header"></i> Цифрлық құзыреттер</div>
+                    <ul style="list-style: none; padding-left: 0; color: var(--text-dark); font-size: 0.9rem; font-weight: 500;">
+                        <li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+                            <i class="fa-solid fa-palette" style="color: var(--accent-primary); margin-top: 0.2rem;"></i>
+                            <span><strong>Дизайн & Графика:</strong> Графикалық дизайн, Adobe Photoshop, CorelDRAW</span>
+                        </li>
+                        <li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+                            <i class="fa-solid fa-pen-nib" style="color: var(--accent-teal); margin-top: 0.2rem;"></i>
+                            <span><strong>Мәтінмен жұмыс:</strong> Мәтіндерді жазу және редакциялау, академикалық копирайтинг</span>
+                        </li>
+                        <li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+                            <i class="fa-solid fa-desktop" style="color: var(--accent-indigo); margin-top: 0.2rem;"></i>
+                            <span><strong>ОС & Кеңселік Пакеттер:</strong> Windows, Microsoft Office (Word, Excel, PowerPoint)</span>
+                        </li>
+                        <li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+                            <i class="fa-solid fa-globe" style="color: var(--accent-primary); margin-top: 0.2rem;"></i>
+                            <span><strong>Деректер & Веб:</strong> Деректерді өңдеу, веб-сайттар мен интерактивті ресурстар әзірлеу</span>
+                        </li>
+                        <li style="margin-bottom: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+                            <i class="fa-solid fa-vr-cardboard" style="color: var(--accent-teal); margin-top: 0.2rem;"></i>
+                            <span><strong>EdTech & VR:</strong> Онлайн оқыту платформалары, виртуалды зертханалар, цифрлық оқу ресурстары</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Жеке және Кәсіби Қасиеттер -->
+                <div class="glass-card">
+                    <div class="section-header"></i> Жеке және кәсіби қасиеттер</div>
+                    <div class="skill-tags">
+                        <span class="pill"><i class="fa-solid fa-shield-halved" style="color:var(--accent-primary);"></i> Жауапкершілік</span>
+                        <span class="pill"><i class="fa-solid fa-brain" style="color:var(--accent-teal);"></i> Аналитикалық ойлау</span>
+                        <span class="pill"><i class="fa-solid fa-magnifying-glass" style="color:var(--accent-indigo);"></i> Ғылыми ізденіс</span>
+                        <span class="pill"><i class="fa-solid fa-bolt" style="color:var(--accent-primary);"></i> Жаңа технологияларды жылдам меңгеру</span>
+                        <span class="pill"><i class="fa-solid fa-circle-check" style="color:var(--accent-teal);"></i> Ұқыптылық</span>
+                        <span class="pill"><i class="fa-solid fa-users" style="color:var(--accent-indigo);"></i> Дербес және командалық жұмыс</span>
+                        <span class="pill"><i class="fa-solid fa-chart-line" style="color:var(--accent-primary);"></i> Кәсіби дамуға ұмтылу</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating Microorganisms Animation Script -->
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const imagesData = [
+            { src: 'амеба.png', color: '#00f2ff' },
+            { src: 'бактерия.png', color: '#00ff88' },
+            { src: 'инфузория.png', color: '#ff00ff' },
+            { src: 'вирус.png', color: '#ffcc00' }
+        ];
+
+        const loadedImages = [];
+        let imagesReady = 0;
+
+        imagesData.forEach((item) => {
+            const img = new Image();
+            img.src = item.src;
+            img.onload = () => {
+                imagesReady++;
+            };
+            loadedImages.push({
+                img: img,
+                color: item.color
+            });
+        });
+
+        class FloatingOrganism {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 35 + 40;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.angle = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.005;
+                this.typeIndex = Math.floor(Math.random() * imagesData.length);
+                this.opacity = Math.random() * 0.35 + 0.25;
+            }
+
+            draw() {
+                const item = loadedImages[this.typeIndex];
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.globalAlpha = this.opacity;
+
+                if (imagesReady > 0 && item.img.complete && item.img.naturalWidth !== 0) {
+                    ctx.drawImage(item.img, -this.size / 2, -this.size / 2, this.size, this.size);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size / 3, 0, Math.PI * 2);
+                    ctx.fillStyle = item.color;
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.angle += this.rotationSpeed;
+
+                if (this.x < -100) this.x = canvas.width + 100;
+                if (this.x > canvas.width + 100) this.x = -100;
+                if (this.y < -100) this.y = canvas.height + 100;
+                if (this.y > canvas.height + 100) this.y = -100;
+            }
+        }
+
+        const organisms = [];
+        const organismCount = 18;
+
+        for (let i = 0; i < organismCount; i++) {
+            organisms.push(new FloatingOrganism());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < organisms.length; i++) {
+                for (let j = i + 1; j < organisms.length; j++) {
+                    const dx = organisms[i].x - organisms[j].x;
+                    const dy = organisms[i].y - organisms[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 180) {
+                        ctx.beginPath();
+                        ctx.moveTo(organisms[i].x, organisms[i].y);
+                        ctx.lineTo(organisms[j].x, organisms[j].y);
+                        ctx.strokeStyle = `rgba(2, 132, 199, ${0.12 * (1 - dist / 180)})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            organisms.forEach(org => {
+                org.update();
+                org.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
